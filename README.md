@@ -2,25 +2,25 @@
 
 ## Project Overview
 
-Fraud detection is a critical challenge for financial institutions and e-commerce platforms. Fraudulent transactions can lead to significant financial losses, while incorrectly flagging legitimate transactions can negatively impact customer experience and trust.
+Fraud detection is a critical challenge for both financial institutions and e-commerce platforms. Fraudulent transactions can result in significant financial losses, while incorrectly flagging legitimate transactions can negatively affect customer experience and trust.
 
-This project develops machine learning solutions for detecting fraudulent activities across two different transaction environments:
+This project develops machine learning models capable of detecting fraudulent transactions across two different environments:
 
-1. **E-commerce Transactions** – Transactions enriched with user behavior, device information, browser details, and geolocation data.
-2. **Credit Card Transactions** – Financial transactions with anonymized features transformed using Principal Component Analysis (PCA).
+1. **E-commerce Transactions** – Rich behavioral data including user activity, device information, browser usage, and geolocation.
+2. **Credit Card Transactions** – Financial transaction data containing anonymized PCA-transformed features.
 
-The project follows a complete machine learning workflow including data exploration, preprocessing, feature engineering, class imbalance handling, model training, evaluation, and model selection.
+The project follows a complete machine learning pipeline from data exploration and preprocessing to model training, evaluation, and explainability.
 
 ---
 
 ## Business Objective
 
-The goal is to build robust fraud detection models that:
+The objective is to build reliable fraud detection systems that:
 
-* Accurately identify fraudulent transactions.
-* Minimize false positives and false negatives.
-* Support real-time fraud monitoring and risk management.
-* Provide actionable insights into fraud patterns and risk factors.
+- Accurately identify fraudulent transactions.
+- Minimize false positives and false negatives.
+- Improve fraud monitoring and risk management.
+- Generate actionable business insights from model predictions.
 
 ---
 
@@ -30,12 +30,143 @@ The goal is to build robust fraud detection models that:
 
 E-commerce transaction data containing:
 
-* User information
-* Device information
-* Purchase details
-* Browser information
-* IP address information
-* Fraud labels
+- User information
+- Device information
+- Browser information
+- Purchase information
+- IP address information
+
+Target variable:
+
+- `class`
+  - 1 = Fraud
+  - 0 = Legitimate
+
+---
+
+### 2. IpAddress_to_Country.csv
+
+IP range mapping dataset used to enrich transaction records with country information.
+
+Fields:
+
+- lower_bound_ip_address
+- upper_bound_ip_address
+- country
+
+---
+
+### 3. creditcard.csv
+
+Credit card transaction data containing:
+
+- Time
+- Amount
+- V1–V28 (anonymized PCA-transformed features)
+
+Target variable:
+
+- `Class`
+  - 1 = Fraud
+  - 0 = Legitimate
+
+---
+
+## Project Structure
+
+```text
+project/
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── notebooks/
+│   ├── eda_fraud_data.ipynb
+│   ├── eda_creditcard.ipynb
+│   ├── preprocessing_fraud.ipynb
+│   ├── preprocessing_creditcard.ipynb
+│   ├── modeling_fraud.ipynb
+│   ├── modeling_creditcard.ipynb
+│   └── model_explanability.ipynb
+│
+├── models/
+│   ├── fraud_random_forest.pkl
+│   └── creditcard_random_forest.pkl
+│
+├── reports/
+│
+└── README.md
+```
+
+---
+
+## Exploratory Data Analysis (EDA)
+
+EDA was conducted separately for both datasets.
+
+### Fraud Dataset
+
+Analysis included:
+
+- Missing value analysis
+- Duplicate analysis
+- Class distribution analysis
+- Purchase value distribution
+- Age distribution
+- Browser and traffic source analysis
+- Country-level fraud investigation
+- Correlation analysis
+
+### Credit Card Dataset
+
+Analysis included:
+
+- Missing value analysis
+- Duplicate analysis
+- Fraud class imbalance investigation
+- Amount and Time distributions
+- PCA feature exploration
+- Correlation analysis
+
+---
+
+## Datasets
+
+### 1. Fraud_Data.csv
+
+#### Data Cleaning
+
+- Removed duplicate records
+- Converted datetime fields to proper formats
+- Verified data quality
+
+#### Geolocation Integration
+
+- Converted IP addresses to integer format
+- Mapped transactions to countries using IP range lookup
+- Investigated fraud patterns by country
+
+#### Feature Engineering
+
+Created the following features:
+
+- `time_since_signup`
+- `hour_of_day`
+- `day_of_week`
+- `user_transaction_count`
+- `device_transaction_count`
+
+#### Data Transformation
+
+- One-hot encoded categorical variables
+- Standardized numerical variables using StandardScaler
+
+#### Class Imbalance Handling
+
+Applied SMOTE (Synthetic Minority Oversampling Technique) on the training dataset.
+
+---
 
 Target Variable:
 
@@ -79,206 +210,152 @@ Target Variable:
 
 ## Project Structure
 
-```text
-project/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── notebooks/
-│   ├── eda_fraud_data.ipynb
-│   ├── eda_creditcard.ipynb
-│   ├── preprocessing_fraud.ipynb
-│   ├── preprocessing_creditcard.ipynb
-│   ├── modeling_fraud.ipynb
-│   └── modeling_creditcard.ipynb
-│
-├── models/
-│   ├── fraud_random_forest.pkl
-│   └── creditcard_random_forest.pkl
-│
-├── reports/
-│
-└── README.md
-```
-
----
-
-## Exploratory Data Analysis (EDA)
-
-EDA was conducted separately for both datasets and included:
-
-### Fraud Dataset
-
-* Missing value analysis
-* Duplicate detection
-* Fraud distribution analysis
-* Purchase value analysis
-* Age distribution analysis
-* Browser and traffic source analysis
-* Country-level fraud analysis
-* Correlation analysis
-
-### Credit Card Dataset
-
-* Missing value analysis
-* Duplicate detection
-* Class imbalance analysis
-* Distribution of Amount and Time
-* PCA feature analysis
-* Correlation analysis
-* Fraud pattern investigation
-
----
-
-## Data Preprocessing
-
-### Fraud Dataset
-
 #### Data Cleaning
 
-* Removed duplicate records
-* Converted datetime fields to appropriate formats
-* Verified data quality and consistency
-
-#### Geolocation Integration
-
-* Converted IP addresses to integer format
-* Mapped transactions to countries using IP range matching
-* Analyzed fraud distribution by country
-
-#### Feature Engineering
-
-Created the following fraud-related features:
-
-* `time_since_signup`
-* `hour_of_day`
-* `day_of_week`
-* `user_transaction_count`
-* `device_transaction_count`
+- Removed duplicate records
+- Verified data consistency
 
 #### Data Transformation
 
-* One-hot encoded categorical variables
-* Standardized numerical variables using StandardScaler
+- Standardized numerical features
+- Preserved PCA-transformed variables
 
 #### Class Imbalance Handling
 
-Applied SMOTE (Synthetic Minority Oversampling Technique) on the training dataset to balance fraudulent and legitimate transactions.
-
----
-
-### Credit Card Dataset
-
-#### Data Cleaning
-
-* Removed duplicate transactions
-* Verified data quality
-
-#### Data Transformation
-
-* Standardized numerical features
-* Preserved PCA-transformed variables
-
-#### Class Imbalance Handling
-
-Applied SMOTE on the training dataset to address severe class imbalance.
+Applied SMOTE to balance fraudulent and legitimate transactions in the training set.
 
 ---
 
 ## Machine Learning Models
 
-Two classification models were developed and compared for each dataset.
+Two classification models were trained and evaluated for each dataset.
 
-### 1. Logistic Regression
+### Logistic Regression
 
-Used as a baseline interpretable model.
+Used as an interpretable baseline model.
 
-Evaluation Metrics:
-
-* F1 Score
-* AUC-PR (Area Under Precision-Recall Curve)
-* Confusion Matrix
-* Classification Report
-
----
-
-### 2. Random Forest Classifier
+### Random Forest
 
 Used as an ensemble learning model capable of capturing complex fraud patterns.
 
-Evaluation Metrics:
+---
 
-* F1 Score
-* AUC-PR
-* Confusion Matrix
-* Classification Report
+## Model Evaluation Metrics
+
+Models were evaluated using:
+
+- F1 Score
+- AUC-PR (Area Under Precision-Recall Curve)
+- Confusion Matrix
+- Classification Report
+
+These metrics were chosen because fraud detection datasets are highly imbalanced and accuracy alone can be misleading.
+
+---
+
+## Model Results
+
+### Credit Card Dataset
+
+| Model | F1 Score | AUC-PR |
+|---------|---------|---------|
+| Logistic Regression | 0.10 | 0.677 |
+| Random Forest | 0.83 | 0.804 |
+
+**Selected Model:** Random Forest
+
+---
+
+### Fraud Dataset
+
+| Model | F1 Score | AUC-PR |
+|---------|---------|---------|
+| Logistic Regression | 0.674 | 0.641 |
+| Random Forest | 0.696 | 0.704 |
+
+**Selected Model:** Random Forest
 
 ---
 
 ## Cross Validation
 
-Stratified K-Fold Cross Validation (k=5) was performed to ensure reliable performance estimation while preserving fraud class distribution across folds.
+Stratified 5-Fold Cross Validation was performed to evaluate model stability while preserving class distribution.
 
-Metrics Reported:
+Evaluation metrics reported:
 
-* Mean F1 Score
-* Standard Deviation of F1 Score
+- Mean F1 Score
+- Standard Deviation of F1 Score
 
 ---
 
-## Model Selection
+## Model Explainability
 
-Random Forest was selected as the final model for both datasets due to:
+Model interpretation was performed using:
 
-* Higher F1 Scores
-* Better AUC-PR performance
-* Lower false positive rates
-* Stronger fraud detection capability
-* Consistent cross-validation performance
+### Built-in Feature Importance
 
-Final saved models:
+Top fraud indicators identified by the Random Forest model:
 
-* `fraud_random_forest.pkl`
-* `creditcard_random_forest.pkl`
+1. Device Transaction Count
+2. Time Since Signup
+3. Day of Week
+4. Hour of Day
+5. Age
+6. Purchase Value
+
+### SHAP Analysis
+
+SHAP was used to:
+
+- Explain global feature importance
+- Interpret individual predictions
+- Identify drivers of fraud detection
+- Support business recommendations
+
+---
+
+## Saved Models
+
+Final trained models were serialized using Joblib:
+
+- `fraud_random_forest.pkl`
+- `creditcard_random_forest.pkl`
+
+These models can be reused for inference, deployment, and explainability analysis.
 
 ---
 
 ## Technologies Used
 
-* Python
-* Pandas
-* NumPy
-* Matplotlib
-* Seaborn
-* Scikit-learn
-* Imbalanced-learn (SMOTE)
-* Joblib
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Scikit-learn
+- Imbalanced-learn (SMOTE)
+- SHAP
+- Joblib
 
 ---
 
-## Key Outcomes
+## Key Findings
 
-* Successfully integrated geolocation data into e-commerce transactions.
-* Engineered behavioral features associated with fraud risk.
-* Addressed severe class imbalance using SMOTE.
-* Built and evaluated multiple fraud detection models.
-* Identified Random Forest as the best-performing model for both datasets.
-* Produced reusable trained models for future deployment and explainability analysis.
-
----
-
-## Future Work
-
-* Model explainability using SHAP.
-* Hyperparameter optimization.
-* Real-time fraud detection pipeline.
-* Deployment using Flask or FastAPI.
-* Model monitoring and drift detection.
+- Device activity is the strongest indicator of fraud in e-commerce transactions.
+- Transactions occurring shortly after account creation are more likely to be fraudulent.
+- Time-based behavioral patterns contribute significantly to fraud detection.
+- Random Forest consistently outperformed Logistic Regression across both datasets.
+- Feature engineering substantially improved model performance on the fraud dataset.
 
 ---
 
-## Author
+## Future Improvements
 
-Fraud Detection Project – Adey Innovations Inc. Case Study
+- Hyperparameter optimization using GridSearchCV or RandomizedSearchCV
+- XGBoost and LightGBM model experimentation
+- Real-time fraud detection pipeline
+- API deployment using FastAPI
+- Model monitoring and drift detection
+
+---
+
