@@ -88,7 +88,7 @@ project/
 │   ├── preprocessing_creditcard.ipynb
 │   ├── modeling_fraud.ipynb
 │   ├── modeling_creditcard.ipynb
-│   └── shap_analysis.ipynb
+│   └── model_explanability.ipynb
 │
 ├── models/
 │   ├── fraud_random_forest.pkl
@@ -131,9 +131,9 @@ Analysis included:
 
 ---
 
-## Data Preprocessing
+## Datasets
 
-### Fraud Dataset
+### 1. Fraud_Data.csv
 
 #### Data Cleaning
 
@@ -168,7 +168,47 @@ Applied SMOTE (Synthetic Minority Oversampling Technique) on the training datase
 
 ---
 
-### Credit Card Dataset
+Target Variable:
+
+* `class`
+
+  * 1 = Fraud
+  * 0 = Legitimate
+
+---
+
+### 2. IpAddress_to_Country.csv
+
+IP address mapping dataset used to enrich transaction records with country information.
+
+Fields:
+
+* lower_bound_ip_address
+* upper_bound_ip_address
+* country
+
+---
+
+### 3. creditcard.csv
+
+Credit card transaction dataset containing anonymized features.
+
+Features:
+
+* Time
+* Amount
+* V1–V28 (PCA-transformed variables)
+
+Target Variable:
+
+* `Class`
+
+  * 1 = Fraud
+  * 0 = Legitimate
+
+---
+
+## Project Structure
 
 #### Data Cleaning
 
